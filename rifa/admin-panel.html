@@ -69,10 +69,12 @@ tr:hover{background:var(--gray-100)}
 .empty-icon{font-size:3rem;margin-bottom:1rem}
 .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:9999}
 .loading-text{color:var(--text-primary);font-size:1.2rem;font-weight:600}
+#numeroBuscar:focus{outline:none;border-color:#16a34a;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
 @media(max-width:768px){
   .nav-toggle{display:block}
   .nav-list{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg-card);flex-direction:column;padding:1rem;gap:.5rem;box-shadow:var(--shadow-lg)}
   .nav-list.show{display:flex}
+  table{min-width:700px}
 }
 </style>
 </head>
@@ -134,6 +136,21 @@ tr:hover{background:var(--gray-100)}
   <div class="stat-item"><span class="stat-number" id="statConfirmed">0</span><span class="stat-label">Confirmados</span></div>
   <div class="stat-item"><span class="stat-number" id="statExpired">0</span><span class="stat-label">Expirados</span></div>
 </div>
+<div class="table-container">
+  <div class="table-title">🎯 Buscar Número Ganador</div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem">
+    <input type="text" id="numeroBuscar" placeholder="Ingresa el número (ej: 00042)" style="padding:.75rem 1rem;border:2px solid #22c55e;border-radius:10px;background:var(--bg-card);color:var(--text-primary);font-size:1rem;width:200px;font-family:inherit">
+    <button onclick="buscarNumeroGanador()" style="padding:.75rem 1.5rem;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-family:inherit">🔍 Buscar</button>
+  </div>
+  <div id="resultadoBusqueda" style="display:none;background:var(--gray-100);padding:1.5rem;border-radius:12px;margin-top:1rem">
+    <p style="font-size:1.1rem;margin-bottom:.5rem">El número <strong id="numeroEncontrado" style="color:#22c55e;font-size:1.3rem"></strong> pertenece a:</p>
+    <p style="font-size:1.5rem;font-weight:700;color:#22c55e;margin-bottom:.5rem" id="nombreEncontrado"></p>
+    <p style="color:var(--text-secondary)">WhatsApp: <a href="#" id="whatsappLink" style="color:#22c55e;text-decoration:none;font-weight:600"></a></p>
+  </div>
+  <div id="sinResultado" style="display:none;background:#450a0a;padding:1.5rem;border-radius:12px;margin-top:1rem;color:#fca5a5">
+    El número no está registrado o no ha sido comprado.
+  </div>
+</div>
 <div class="table-container" id="tableContainer">
 <div class="empty"><div class="empty-icon">☘</div><p>Cargando compras...</p></div>
 </div>
@@ -192,6 +209,50 @@ async function cargarCompras() {
   }
 }
 
+async function buscarNumeroGanador() {
+  const input = document.getElementById("numeroBuscar");
+  let numero = input.value.trim();
+  
+  document.getElementById("resultadoBusqueda").style.display = "none";
+  document.getElementById("sinResultado").style.display = "none";
+  
+  if (!numero) {
+    alert("Por favor ingresa un número");
+    return;
+  }
+  
+  numero = parseInt(numero, 10);
+  
+  // First check in loaded purchases
+  let compra = compras.find(c => c.numeros && c.numeros.includes(numero));
+  
+  // If not found, search in Firebase
+  if (!compra) {
+    try {
+      const snapshot = await db.collection("compras").get();
+      for (const doc of snapshot.docs) {
+        const data = doc.data();
+        if (data.numeros && data.numeros.includes(numero)) {
+          compra = data;
+          break;
+        }
+      }
+    } catch (e) {
+      console.error("Error buscando en Firebase:", e);
+    }
+  }
+  
+  if (compra) {
+    document.getElementById("numeroEncontrado").textContent = String(numero).padStart(5, "0");
+    document.getElementById("nombreEncontrado").textContent = compra.nombre || "—";
+    document.getElementById("whatsappLink").textContent = compra.whatsapp || "—";
+    document.getElementById("whatsappLink").href = "https://wa.me/52" + (compra.whatsapp || "");
+    document.getElementById("resultadoBusqueda").style.display = "block";
+  } else {
+    document.getElementById("sinResultado").style.display = "block";
+  }
+}
+
 function actualizarEstadisticas() {
   let total = 0, pendiente = 0, confirmado = 0, expirado = 0;
   compras.forEach(c => {
@@ -229,13 +290,17 @@ function renderizarTabla() {
 
   const labels = { pendiente: "Pendientes", confirmado: "Confirmadas", expirado: "Expiradas" };
   let html = `<div class="table-title">Compras ${labels[tabActual]}</div>`;
-  html += `<table><thead><tr><th>ID</th><th>Fecha</th><th>Números</th><th>Total</th>${tabActual === "pendiente" ? "<th>Acciones</th>" : ""}</tr></thead><tbody>`;
+  html += `<table><thead><tr><th>ID</th><th>Nombre</th><th>WhatsApp</th><th>Fecha</th><th>Números</th><th>Total</th>${tabActual === "pendiente" ? "<th>Acciones</th>" : ""}</tr></thead><tbody>`;
 
   filtrados.forEach(c => {
     const fecha = c.fecha ? new Date(c.fecha).toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
     const nums = (c.numeros || []).map(n => `<span class="num-tag">${String(n).padStart(5, "0")}</span>`).join("");
+    const nombre = c.nombre || "—";
+    const whatsapp = c.whatsapp || "—";
     html += `<tr>
       <td><strong>${c.id || "—"}</strong></td>
+      <td>${nombre}</td>
+      <td>${whatsapp}</td>
       <td>${fecha}</td>
       <td><div class="numeros-list">${nums}</div></td>
       <td><strong>$${c.total || 0}</strong></td>
