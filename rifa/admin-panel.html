@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Treebolito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-dark:#0d5c2e;--green:#16a34a;--green-light:#22c55e;--green-pale:#064e3b;
+  --red:#dc2626;--yellow:#eab308;--white:#e5e5e5;
+  --bg-dark:#0f0f0f;--bg-card:#1a1a1a;
+  --gray-50:#1a1a1a;--gray-100:#252525;--gray-200:#333;--gray-300:#444;--gray-500:#888;
+  --text-primary:#fff;--text-secondary:#aaa;
+  --shadow:0 4px 6px -1px rgba(0,0,0,.3);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh}
+.header{background:rgba(26,26,26,.95);backdrop-filter:blur(10px);padding:.75rem 0;position:sticky;top:0;z-index:1000;box-shadow:var(--shadow);border-bottom:1px solid rgba(34,197,94,.1)}
+.header-content{max-width:1200px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:.5rem}
+.logo-icon{width:40px;height:40px}
+.logo-text{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-list{display:flex;list-style:none;gap:.5rem;align-items:center}
+.nav-list a,.nav-list button{color:var(--text-primary);text-decoration:none;font-weight:600;padding:.6rem 1rem;border-radius:50px;transition:.3s;background:none;border:none;cursor:pointer;font-family:inherit;font-size:.95rem}
+.nav-list a:hover,.nav-list button:hover{background:var(--green-pale);color:#4ade80}
+.nav-list a.active{background:var(--green);color:var(--white)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:.5rem}
+.nav-toggle span{display:block;width:25px;height:3px;background:#22c55e;margin:5px 0;border-radius:2px}
+.container{max-width:1200px;margin:0 auto;padding:2rem 1rem}
+.hero{background:linear-gradient(135deg,#0a0a0a,#1a1a1a,#0f0f0f);color:var(--white);text-align:center;padding:3rem 1rem;border-bottom:1px solid var(--gray-200)}
+.hero-title{font-size:2rem;font-weight:800}
+.hero-user{font-size:.9rem;color:var(--text-secondary);margin-top:.5rem}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:1rem}
+.connection-status{padding:.6rem 1rem;border-radius:50px;font-weight:600;display:inline-block;font-size:.9rem}
+.connection-status.online{background:var(--green-pale);color:#22c55e}
+.connection-status.offline{background:#450a0a;color:#fca5a5}
+.btn-refresh{padding:.6rem 1.25rem;background:linear-gradient(135deg,var(--green),var(--green-light));color:var(--white);border:none;border-radius:50px;cursor:pointer;font-weight:600;transition:.3s;font-family:inherit}
+.btn-refresh:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.tabs{display:flex;gap:.5rem;margin:1.5rem 0;flex-wrap:wrap}
+.tab{padding:.75rem 1.5rem;border:2px solid var(--green);background:var(--bg-card);border-radius:50px;cursor:pointer;font-weight:600;color:#22c55e;transition:.3s;font-family:inherit;font-size:.95rem}
+.tab:hover,.tab.active{background:var(--green);color:var(--white);transform:translateY(-2px)}
+.stats{background:var(--bg-card);border-radius:20px;padding:1.5rem;margin-bottom:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;box-shadow:var(--shadow-lg)}
+.stat-item{text-align:center;padding:1.25rem;border-radius:14px;background:var(--gray-100)}
+.stat-number{display:block;font-size:2rem;font-weight:800;color:#22c55e}
+.stat-label{font-size:.85rem;color:var(--text-secondary);font-weight:500}
+.table-container{background:var(--bg-card);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow-lg);overflow-x:auto}
+.table-title{color:#22c55e;margin-bottom:1.25rem;font-size:1.25rem;font-weight:700}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th{background:var(--green-pale);color:#22c55e;padding:1rem;text-align:left;font-weight:700}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+td{padding:.875rem 1rem;border-bottom:1px solid var(--gray-200);color:var(--text-primary)}
+tr:hover{background:var(--gray-100)}
+.status{padding:.35rem .875rem;border-radius:50px;font-size:.85rem;font-weight:600;display:inline-block}
+.status.pending{background:#422006;color:#fbbf24}
+.status.confirmed{background:var(--green-pale);color:#22c55e}
+.status.expired{background:#450a0a;color:#fca5a5}
+.btn-action{padding:.5rem 1rem;border:none;border-radius:10px;cursor:pointer;font-weight:600;transition:.3s;font-family:inherit;font-size:.85rem;margin:.125rem}
+.btn-confirm{background:linear-gradient(135deg,var(--green),var(--green-light));color:var(--white)}
+.btn-confirm:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn-reject{background:linear-gradient(135deg,var(--red),#ef4444);color:var(--white)}
+.btn-reject:hover{transform:translateY(-2px)}
+.numeros-list{display:flex;flex-wrap:wrap;gap:.25rem;max-width:300px}
+.num-tag{background:var(--green-pale);color:#22c55e;padding:.25rem .5rem;border-radius:6px;font-size:.85rem;font-weight:600}
+.empty{text-align:center;padding:3rem;color:var(--text-secondary)}
+.empty-icon{font-size:3rem;margin-bottom:1rem}
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:9999}
+.loading-text{color:var(--text-primary);font-size:1.2rem;font-weight:600}
+@media(max-width:768px){
+  .nav-toggle{display:block}
+  .nav-list{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg-card);flex-direction:column;padding:1rem;gap:.5rem;box-shadow:var(--shadow-lg)}
+  .nav-list.show{display:flex}
+}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+<span class="loading-text">⏳ Verificando autenticación...</span>
+</div>
+
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<svg viewBox="0 0 100 100" class="logo-icon">
+<defs>
+<linearGradient id="leafG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+<linearGradient id="leafG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient>
+</defs>
+<circle cx="50" cy="40" r="25" fill="url(#leafG1)"/>
+<circle cx="35" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="65" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="50" cy="22" r="20" fill="url(#leafG1)"/>
+<circle cx="25" cy="25" r="12" fill="url(#leafG2)"/>
+<circle cx="75" cy="25" r="12" fill="url(#leafG2)"/>
+<path d="M47 65 Q50 80 53 65 L52 65 Q50 90 48 65 Z" fill="#92400e"/>
+</svg>
+<a href="index.html" class="logo-text">Treebolito</a>
+</div>
+<nav class="nav">
+<button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+<ul class="nav-list" id="navList">
+<li><a href="index.html">Inicio</a></li>
+<li><a href="index.html#numeros">Números</a></li>
+<li><a href="reglas.html">Reglas</a></li>
+<li><a href="admin-panel.html" class="active">Admin</a></li>
+<li><button onclick="cerrarSesion()">🚪 Salir</button></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<h1 class="hero-title">Panel de Administración</h1>
+<p class="hero-user" id="userEmail"></p>
+</section>
+
+<div class="container">
+<div class="toolbar">
+<div class="connection-status online" id="connectionStatus">Conectando...</div>
+<button class="btn-refresh" onclick="cargarCompras()">🔄 Actualizar</button>
+</div>
+<div class="tabs">
+  <button class="tab active" data-tab="pendiente">Pendientes</button>
+  <button class="tab" data-tab="confirmado">Confirmados</button>
+  <button class="tab" data-tab="expirado">Expirados</button>
+</div>
+<div class="stats">
+  <div class="stat-item"><span class="stat-number" id="statTotal">0</span><span class="stat-label">Total</span></div>
+  <div class="stat-item"><span class="stat-number" id="statPending">0</span><span class="stat-label">Pendientes</span></div>
+  <div class="stat-item"><span class="stat-number" id="statConfirmed">0</span><span class="stat-label">Confirmados</span></div>
+  <div class="stat-item"><span class="stat-number" id="statExpired">0</span><span class="stat-label">Expirados</span></div>
+</div>
+<div class="table-container" id="tableContainer">
+<div class="empty"><div class="empty-icon">☘</div><p>Cargando compras...</p></div>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCCrsHE4maOWXu06ADT7W6wMXWXzK0wSMo",
+  authDomain: "treebolito.firebaseapp.com",
+  projectId: "treebolito",
+  storageBucket: "treebolito.firebasestorage.app",
+  messagingSenderId: "321841443031",
+  appId: "1:321841443031:web:f8b97c0802150ecee04092"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(app);
+const auth = firebase.auth();
+
+let compras = [];
+let tabActual = "pendiente";
+const NUMEROS_POR_BLOQUE = 1000;
+
+// Auth check
+auth.onAuthStateChanged(user => {
+  const overlay = document.getElementById("loadingOverlay");
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+  overlay.style.display = "none";
+  document.getElementById("userEmail").textContent = "Sesión: " + user.email;
+  document.getElementById("connectionStatus").textContent = "🟢 Conectado";
+  document.getElementById("connectionStatus").className = "connection-status online";
+  initAdmin();
+});
+
+async function initAdmin() {
+  setupTabs();
+  document.getElementById("navToggle").onclick = () => document.getElementById("navList").classList.toggle("show");
+  await cargarCompras();
+}
+
+async function cargarCompras() {
+  try {
+    const snapshot = await db.collection("compras").orderBy("fecha", "desc").limit(100).get();
+    compras = [];
+    snapshot.forEach(doc => compras.push(doc.data()));
+    actualizarEstadisticas();
+    renderizarTabla();
+  } catch (e) {
+    console.error("Error cargando compras:", e);
+  }
+}
+
+function actualizarEstadisticas() {
+  let total = 0, pendiente = 0, confirmado = 0, expirado = 0;
+  compras.forEach(c => {
+    total++;
+    if (c.estado === "pendiente") pendiente++;
+    else if (c.estado === "confirmado") confirmado++;
+    else if (c.estado === "expirado") expirado++;
+  });
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statPending").textContent = pendiente;
+  document.getElementById("statConfirmed").textContent = confirmado;
+  document.getElementById("statExpired").textContent = expirado;
+}
+
+function setupTabs() {
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      tabActual = tab.dataset.tab;
+      renderizarTabla();
+    };
+  });
+}
+
+function renderizarTabla() {
+  const container = document.getElementById("tableContainer");
+  const filtrados = compras.filter(c => c.estado === tabActual);
+
+  if (filtrados.length === 0) {
+    const labels = { pendiente: "pendientes", confirmado: "confirmadas", expirado: "expiradas" };
+    container.innerHTML = `<div class="empty"><div class="empty-icon">☘</div><p>No hay compras ${labels[tabActual]}</p></div>`;
+    return;
+  }
+
+  const labels = { pendiente: "Pendientes", confirmado: "Confirmadas", expirado: "Expiradas" };
+  let html = `<div class="table-title">Compras ${labels[tabActual]}</div>`;
+  html += `<table><thead><tr><th>ID</th><th>Fecha</th><th>Números</th><th>Total</th>${tabActual === "pendiente" ? "<th>Acciones</th>" : ""}</tr></thead><tbody>`;
+
+  filtrados.forEach(c => {
+    const fecha = c.fecha ? new Date(c.fecha).toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "—";
+    const nums = (c.numeros || []).map(n => `<span class="num-tag">${String(n).padStart(5, "0")}</span>`).join("");
+    html += `<tr>
+      <td><strong>${c.id || "—"}</strong></td>
+      <td>${fecha}</td>
+      <td><div class="numeros-list">${nums}</div></td>
+      <td><strong>$${c.total || 0}</strong></td>
+      ${tabActual === "pendiente" ? `<td>
+        <button class="btn-action btn-confirm" onclick="confirmarPago('${c.id}')">✓ Confirmar</button>
+        <button class="btn-action btn-reject" onclick="rechazarPago('${c.id}')">✕ Rechazar</button>
+      </td>` : ""}
+    </tr>`;
+  });
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+}
+
+async function confirmarPago(id) {
+  if (!confirm("¿Confirmar esta compra? Los números quedarán como vendidos.")) return;
+
+  try {
+    const compra = compras.find(c => c.id === id);
+    if (!compra) return;
+
+    // Update purchase status
+    await db.collection("compras").doc(id).update({ estado: "confirmado" });
+
+    // Update blocks: change 'a' to 'v'
+    const bloqueUpdates = {};
+    for (const num of compra.numeros) {
+      const bloqueId = Math.floor(num / NUMEROS_POR_BLOQUE);
+      if (!bloqueUpdates[bloqueId]) bloqueUpdates[bloqueId] = [];
+      bloqueUpdates[bloqueId].push(num);
+    }
+
+    const batch = db.batch();
+    for (const [bloqueId, nums] of Object.entries(bloqueUpdates)) {
+      const docRef = db.collection("bloques").doc(String(bloqueId));
+      const doc = await docRef.get();
+
+      if (doc.exists) {
+        let bloque = doc.data();
+        let dataArr = bloque.data.split("");
+        let apartados = bloque.apartados ? { ...bloque.apartados } : {};
+
+        for (const num of nums) {
+          const offset = num % NUMEROS_POR_BLOQUE;
+          dataArr[offset] = "v";
+          delete apartados[String(offset)];
+        }
+
+        batch.set(docRef, { data: dataArr.join(""), apartados, updated: Date.now() });
+      }
+    }
+
+    // Update stats
+    const statsDoc = db.collection("stats").doc("general");
+    const statsSnap = await statsDoc.get();
+    let stats = statsSnap.exists ? statsSnap.data() : { disponibles: 100000, apartados: 0, vendidos: 0 };
+    stats.apartados -= compra.numeros.length;
+    stats.vendidos += compra.numeros.length;
+    batch.set(statsDoc, stats);
+
+    await batch.commit();
+    alert("✅ Compra confirmada. Los números están vendidos.");
+    await cargarCompras();
+  } catch (e) {
+    console.error("Error confirmando:", e);
+    alert("❌ Error al confirmar: " + e.message);
+  }
+}
+
+async function rechazarPago(id) {
+  if (!confirm("¿Rechazar esta compra? Los números se liberarán.")) return;
+
+  try {
+    const compra = compras.find(c => c.id === id);
+    if (!compra) return;
+
+    await db.collection("compras").doc(id).update({ estado: "expirado" });
+
+    // Update blocks: change 'a' back to 'd'
+    const bloqueUpdates = {};
+    for (const num of compra.numeros) {
+      const bloqueId = Math.floor(num / NUMEROS_POR_BLOQUE);
+      if (!bloqueUpdates[bloqueId]) bloqueUpdates[bloqueId] = [];
+      bloqueUpdates[bloqueId].push(num);
+    }
+
+    const batch = db.batch();
+    for (const [bloqueId, nums] of Object.entries(bloqueUpdates)) {
+      const docRef = db.collection("bloques").doc(String(bloqueId));
+      const doc = await docRef.get();
+
+      if (doc.exists) {
+        let bloque = doc.data();
+        let dataArr = bloque.data.split("");
+        let apartados = bloque.apartados ? { ...bloque.apartados } : {};
+
+        for (const num of nums) {
+          const offset = num % NUMEROS_POR_BLOQUE;
+          dataArr[offset] = "d";
+          delete apartados[String(offset)];
+        }
+
+        batch.set(docRef, { data: dataArr.join(""), apartados, updated: Date.now() });
+      }
+    }
+
+    const statsDoc = db.collection("stats").doc("general");
+    const statsSnap = await statsDoc.get();
+    let stats = statsSnap.exists ? statsSnap.data() : { disponibles: 100000, apartados: 0, vendidos: 0 };
+    stats.apartados -= compra.numeros.length;
+    stats.disponibles += compra.numeros.length;
+    batch.set(statsDoc, stats);
+
+    await batch.commit();
+    alert("Compra rechazada. Números liberados.");
+    await cargarCompras();
+  } catch (e) {
+    console.error("Error rechazando:", e);
+    alert("❌ Error: " + e.message);
+  }
+}
+
+function cerrarSesion() {
+  auth.signOut().then(() => {
+    location.href = "login.html";
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treebolito - Rifa de la Suerte | Participa y Gana</title>
+<meta name="description" content="Participa en la rifa Treebolito. Elige tus números de la suerte entre 99,999 opciones. ¡Tu oportunidad de ganar está a un número de distancia!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Offline Banner -->
+<div class="offline-banner" id="offlineBanner">📡 Sin conexión a internet — Los datos podrían no estar actualizados</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Header -->
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<svg viewBox="0 0 100 100" class="logo-icon">
+<defs>
+<linearGradient id="leafG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+<linearGradient id="leafG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient>
+</defs>
+<circle cx="50" cy="40" r="25" fill="url(#leafG1)"/>
+<circle cx="35" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="65" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="50" cy="22" r="20" fill="url(#leafG1)"/>
+<circle cx="25" cy="25" r="12" fill="url(#leafG2)"/>
+<circle cx="75" cy="25" r="12" fill="url(#leafG2)"/>
+<path d="M47 65 Q50 80 53 65 L52 65 Q50 90 48 65 Z" fill="#92400e"/>
+</svg>
+<span class="logo-text">Treebolito</span>
+</div>
+<nav class="nav">
+<button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+<ul class="nav-list" id="navList">
+<li><a href="#premio">Premio</a></li>
+<li><a href="#numeros">Números</a></li>
+<li><a href="reglas.html">Reglas</a></li>
+<li><a href="login.html">Admin</a></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+<div class="hero-content">
+<div class="hero-badge">🎉 ¡Participa y gana!</div>
+<h1 class="hero-title">Treebolito</h1>
+<p class="hero-subtitle">Tu oportunidad de ganar está a un número de distancia</p>
+<a href="#numeros" class="hero-cta">Elegir mis números →</a>
+<div class="hero-clovers">
+<span class="clover">☘</span><span class="clover">☘</span><span class="clover">☘</span>
+</div>
+</div>
+</section>
+
+<!-- Progress Bar -->
+<div class="progress-section">
+<div class="progress-card">
+<div class="progress-header">
+<span class="progress-label">Progreso de la rifa</span>
+<span class="progress-percent" id="progressPercent">0%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+<div class="progress-stats">
+<div class="progress-stat">
+<span class="progress-stat-num green" id="statDisponibles">100,000</span>
+<span class="progress-stat-label">Disponibles</span>
+</div>
+<div class="progress-stat">
+<span class="progress-stat-num yellow" id="statApartados">0</span>
+<span class="progress-stat-label">Apartados</span>
+</div>
+<div class="progress-stat">
+<span class="progress-stat-num red" id="statVendidos">0</span>
+<span class="progress-stat-label">Vendidos</span>
+</div>
+<div class="progress-stat">
+<span class="progress-stat-num green">$1</span>
+<span class="progress-stat-label">Por número</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Premio -->
+<section class="premio" id="premio">
+<div class="container">
+<h2 class="section-title">🏆 El Premio</h2>
+<div class="premio-card">
+<div class="premio-glow"></div>
+<div class="premio-imagen">
+<div class="premio-badge">🎁 PREMIADO</div>
+<div class="premio-placeholder" id="premioPlaceholder">
+<svg viewBox="0 0 100 100" class="gift-icon">
+<defs><linearGradient id="giftGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs>
+<rect x="15" y="30" width="70" height="55" rx="8" fill="url(#giftGrad)" stroke="#f59e0b" stroke-width="2"/>
+<rect x="10" y="20" width="80" height="20" rx="4" fill="#fbbf24"/>
+<rect x="45" y="15" width="10" height="75" fill="#fbbf24"/>
+<path d="M35 20 Q50 0 50 20" fill="none" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+<path d="M65 20 Q50 0 50 20" fill="none" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
+<circle cx="25" cy="8" r="8" fill="#fbbf24"/><circle cx="75" cy="8" r="8" fill="#fbbf24"/><circle cx="50" cy="0" r="6" fill="#fbbf24"/>
+</svg>
+<p style="font-weight:700;margin-bottom:0.5rem;font-size:1.1rem">🏆</p>
+<small style="opacity:0.8;font-size:0.9rem">(Tu imagen aquí)</small>
+</div>
+<img id="premioImg" src="" alt="Premio" style="display:none">
+</div>
+<div class="premio-info">
+<h3 id="premioTitulo">🏆 Gran Premio Especial</h3>
+<p class="premio-descripcion" id="premioDescripcion">¡El premio de tus sueños te espera! Cada número es una oportunidad de cambiar tu vida. ¡Participa ahora!</p>
+<div class="premio-fecha">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+<span id="premioFechaTexto">23 de Marzo, 2026</span>
+</div>
+<div class="countdown" id="countdown">
+<div class="countdown-item"><span class="countdown-number" id="countDias">00</span><span class="countdown-label">Días</span></div>
+<div class="countdown-item"><span class="countdown-number" id="countHoras">00</span><span class="countdown-label">Horas</span></div>
+<div class="countdown-item"><span class="countdown-number" id="countMin">00</span><span class="countdown-label">Min</span></div>
+<div class="countdown-item"><span class="countdown-number" id="countSeg">00</span><span class="countdown-label">Seg</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Números -->
+<section class="numeros-section" id="numeros">
+<div class="container">
+<div class="numeros-layout">
+<!-- Sidebar -->
+<div class="sidebar">
+<div class="sidebar-header">
+<h3>✓ Tus números</h3>
+<span id="countLista">0</span> / 100
+</div>
+<div class="sidebar-stats">
+<div class="stat-row"><span>Manuales:</span><strong id="countManuales">0</strong></div>
+<div class="stat-row"><span>Aleatorios:</span><strong id="countAleatorios">0</strong></div>
+<div class="stat-row total"><span>Total:</span><strong id="totalLista">$0</strong></div>
+</div>
+<div id="numerosSeleccionadosLista" class="numeros-lista">
+<div class="sidebar-empty"><div class="sidebar-empty-icon">🎲</div><p>Selecciona números o usa el generador</p></div>
+</div>
+<button id="btnConfirmar" class="btn btn-green" style="margin-bottom:1rem">✅ Confirmar Compra</button>
+<div class="random-section">
+<div class="random-title">
+<svg viewBox="0 0 24 24" fill="#8b5cf6"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+🎲 Números al Azar
+</div>
+<input type="number" id="cantidadAleatorio" class="random-input" min="1" max="100" value="5" placeholder="Cantidad">
+<div class="random-presets">
+<button class="random-preset" onclick="document.getElementById('cantidadAleatorio').value=5;document.getElementById('btnAleatorio').click()">5</button>
+<button class="random-preset" onclick="document.getElementById('cantidadAleatorio').value=10;document.getElementById('btnAleatorio').click()">10</button>
+<button class="random-preset" onclick="document.getElementById('cantidadAleatorio').value=20;document.getElementById('btnAleatorio').click()">20</button>
+<button class="random-preset" onclick="document.getElementById('cantidadAleatorio').value=50;document.getElementById('btnAleatorio').click()">50</button>
+</div>
+<button id="btnAleatorio" class="btn btn-purple" style="margin-top:0.75rem">🎲 Generar Números</button>
+</div>
+<div class="sidebar-actions">
+<div class="sidebar-bottom">
+<span id="disponiblesRestantes" class="disponibles">0 disponibles</span>
+<button id="btnLimpiarSeleccion" class="btn btn-red">🗑️ Limpiar</button>
+</div>
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+<h2 class="section-title">✨ Elige tus números de la suerte</h2>
+<div class="numeros-toolbar">
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Buscar número" maxlength="5" inputmode="numeric">
+<button id="searchBtn" class="search-btn">🔍</button>
+</div>
+<div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="filter-btn active" data-filter="todos">Todos</button>
+<button class="filter-btn" data-filter="disponibles">Solo disponibles</button>
+</div>
+<div class="seleccion-info">
+Selección: <strong id="seleccionCount">0</strong> / 100 números
+</div>
+</div>
+<div class="leyenda">
+<span class="leyenda-item"><span class="leyenda-color disponible"></span> Disponible</span>
+<span class="leyenda-item"><span class="leyenda-color seleccionado"></span> Seleccionado</span>
+<span class="leyenda-item"><span class="leyenda-color apartado"></span> Apartado</span>
+<span class="leyenda-item"><span class="leyenda-color vendido"></span> Vendido</span>
+</div>
+<div class="numeros-pagination">
+<button id="prevPage" class="page-btn">← Anterior</button>
+<span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">200</span></span>
+<button id="nextPage" class="page-btn">Siguiente →</button>
+</div>
+<div class="numeros-grid" id="numerosGrid"></div>
+<div class="numeros-pagination bottom">
+<button id="prevPage2" class="page-btn">← Anterior</button>
+<span class="page-info">Página <span id="currentPage2">1</span> de <span id="totalPages2">200</span></span>
+<button id="nextPage2" class="page-btn">Siguiente →</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Floating Cart Button -->
+<div class="floating-cart" id="floatingCart">
+<button class="floating-cart-btn" id="floatingCartBtn">
+🛒
+<span class="floating-cart-badge" id="cartBadge">0</span>
+</button>
+</div>
+
+<!-- Purchase Modal -->
+<div class="modal" id="compraModal">
+<div class="modal-content">
+<div class="modal-glow"></div>
+<button class="modal-close" id="modalClose">✕</button>
+<div class="modal-body">
+<div class="modal-icon">
+<svg viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+</div>
+<h3 style="text-align:center;font-size:1.5rem;margin-bottom:0.5rem;color:#22c55e">✅ Resumen de Compra</h3>
+<p style="text-align:center;color:var(--text-secondary);margin-bottom:1.5rem">Revisa tus números antes de apartar</p>
+<div class="compra-id">
+<div style="text-align:center">
+<span class="id-label">ID de compra</span>
+<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.5rem">
+<span class="id-value" id="compraId">TB-2026-00001</span>
+<button class="copy-btn" id="copyId" title="Copiar ID">📋</button>
+</div>
+</div>
+</div>
+<div class="compra-numeros">
+<p class="numeros-label">Tus números:</p>
+<div class="numeros-seleccion" id="numerosSeleccion"></div>
+</div>
+<div class="compra-total">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="font-size:1.1rem">Total a pagar:</span>
+<span class="total-amount" id="compraTotal">$0 MXN</span>
+</div>
+</div>
+<div class="pago-info">
+<h4>💳 Datos de Pago</h4>
+<div class="pago-datos">
+<div class="pago-dato">
+<span class="dato-label">CLABE</span>
+<span class="dato-value" id="clabeValue">722969010056604160</span>
+<button class="copy-btn" id="copyClabe" title="Copiar CLABE">📋</button>
+</div>
+<div class="pago-dato">
+<span class="dato-label">WhatsApp</span>
+<a href="https://wa.me/524741482078" target="_blank" class="whatsapp-link" id="whatsappValue">4741482078</a>
+<button class="copy-btn" id="copyWhatsapp" title="Copiar WhatsApp">📋</button>
+</div>
+</div>
+<div class="pago-instrucciones">
+<p>📱 <strong>¿Qué sigue?</strong></p>
+<ol>
+<li>Realiza la transferencia por el <strong>total</strong></li>
+<li>Envía el comprobante por <strong>WhatsApp</strong></li>
+<li>Incluye tu <strong>ID de compra</strong></li>
+<li>¡Recibe tu confirmación!</li>
+</ol>
+</div>
+</div>
+<div class="compra-aviso">
+<p>⏰ <strong>Importante:</strong> Tienes 24 horas para pagar. Pasado ese tiempo, los números se liberarán.</p>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" id="cancelarCompra">Cancelar</button>
+<button class="btn btn-primary" id="confirmarApartar">✅ Apartar Números</button>
+</div>
+</div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal" id="successModal">
+<div class="modal-content success-content">
+<div class="modal-glow"></div>
+<div class="success-icon">🎉</div>
+<h3 style="font-size:1.8rem;margin-bottom:0.5rem">¡Felicidades!</h3>
+<p style="font-size:1.1rem;margin-bottom:1rem">Tus números han sido apartados</p>
+<p class="success-id">ID: <strong id="successId"></strong></p>
+<p class="success-instrucciones">📱 <strong>Próximo paso:</strong> Envía el comprobante de pago por WhatsApp antes de 24 horas</p>
+<a href="https://wa.me/524741482078" target="_blank" class="btn-whatsapp" id="whatsappShare">
+<svg viewBox="0 0 24 24" class="whatsapp-icon"><path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+Enviar Comprobante
+</a>
+<button class="btn btn-secondary" id="closeSuccess">Cerrar</button>
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-logo">☘ Treebolito</div>
+<div class="footer-links">
+<a href="#premio">Premio</a>
+<a href="#numeros">Números</a>
+<a href="reglas.html">Reglas</a>
+</div>
+<p class="footer-copy">© 2026 Treebolito. Todos los derechos reservados.</p>
+</div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

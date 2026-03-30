@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Treebolito Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-dark:#0d5c2e;--green:#16a34a;--green-light:#22c55e;--green-pale:#064e3b;
+  --white:#e5e5e5;--bg-dark:#0f0f0f;--bg-card:#1a1a1a;
+  --gray-200:#333;--gray-300:#444;--gray-500:#888;
+  --text-primary:#fff;--text-secondary:#aaa;--red:#dc2626;
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.4);--shadow-xl:0 20px 25px -5px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0a0a0a,#1a1a1a,#0f0f0f);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.login-box{background:var(--bg-card);border-radius:24px;padding:2.5rem;width:100%;max-width:420px;box-shadow:var(--shadow-xl);animation:fadeInUp .5s ease;border:1px solid var(--gray-200)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.logo{text-align:center;margin-bottom:2rem}
+.logo-icon{width:70px;height:70px;margin-bottom:.5rem}
+.logo-text{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h1{text-align:center;color:var(--text-primary);margin-bottom:2rem;font-size:1.3rem;font-weight:600}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;color:var(--text-secondary);font-weight:500;margin-bottom:.5rem;font-size:.9rem}
+input{width:100%;padding:1rem 1.25rem;border:2px solid var(--gray-300);border-radius:14px;font-size:1rem;font-family:inherit;transition:.3s;background:var(--bg-dark);color:var(--text-primary)}
+input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(34,197,94,.2)}
+input::placeholder{color:var(--gray-500)}
+.btn{width:100%;padding:1rem;background:linear-gradient(135deg,var(--green),var(--green-light));color:var(--white);border:none;border-radius:14px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:.3s;font-family:inherit;box-shadow:var(--shadow-lg)}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-xl)}
+.btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.error{color:var(--red);text-align:center;margin-bottom:1rem;display:none;font-weight:500;padding:.75rem;background:#450a0a;border-radius:10px;font-size:.9rem}
+.back{text-align:center;margin-top:1.5rem}
+.back a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:.3s}
+.back a:hover{opacity:.7}
+.info{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--text-secondary);line-height:1.5}
+.loading{display:none;text-align:center;padding:1rem;color:var(--text-secondary)}
+.loading.show{display:block}
+</style>
+</head>
+<body>
+<div class="login-box">
+<div class="logo">
+<svg viewBox="0 0 100 100" class="logo-icon">
+<defs>
+<linearGradient id="leafG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+<linearGradient id="leafG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient>
+</defs>
+<circle cx="50" cy="40" r="25" fill="url(#leafG1)"/>
+<circle cx="35" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="65" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="50" cy="22" r="20" fill="url(#leafG1)"/>
+<circle cx="25" cy="25" r="12" fill="url(#leafG2)"/>
+<circle cx="75" cy="25" r="12" fill="url(#leafG2)"/>
+<path d="M47 65 Q50 80 53 65 L52 65 Q50 90 48 65 Z" fill="#92400e"/>
+</svg>
+<div class="logo-text">Treebolito</div>
+</div>
+<h1>🔐 Acceso Administrador</h1>
+<div class="loading" id="loading">⏳ Verificando sesión...</div>
+<div id="loginForm">
+<p class="error" id="error"></p>
+<div class="form-group">
+<label for="email">Correo electrónico</label>
+<input type="email" id="email" placeholder="admin@treebolito.com" autocomplete="email">
+</div>
+<div class="form-group">
+<label for="password">Contraseña</label>
+<input type="password" id="password" placeholder="Tu contraseña segura" autocomplete="current-password">
+</div>
+<button class="btn" id="loginBtn" onclick="login()">Entrar</button>
+<div class="info">
+<p>🔒 Autenticación segura con Firebase</p>
+</div>
+</div>
+<div class="back">
+<a href="index.html">← Volver al inicio</a>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCCrsHE4maOWXu06ADT7W6wMXWXzK0wSMo",
+  authDomain: "treebolito.firebaseapp.com",
+  projectId: "treebolito",
+  storageBucket: "treebolito.firebasestorage.app",
+  messagingSenderId: "321841443031",
+  appId: "1:321841443031:web:f8b97c0802150ecee04092"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Check if already logged in
+document.getElementById("loading").classList.add("show");
+document.getElementById("loginForm").style.display = "none";
+
+auth.onAuthStateChanged(user => {
+  document.getElementById("loading").classList.remove("show");
+  if (user) {
+    location.href = "admin-panel.html";
+  } else {
+    document.getElementById("loginForm").style.display = "block";
+  }
+});
+
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const pass = document.getElementById("password").value;
+  const errorEl = document.getElementById("error");
+  const btn = document.getElementById("loginBtn");
+
+  if (!email || !pass) {
+    errorEl.textContent = "Ingresa tu correo y contraseña";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Entrando...";
+  errorEl.style.display = "none";
+
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    location.href = "admin-panel.html";
+  } catch (e) {
+    const messages = {
+      "auth/user-not-found": "Usuario no encontrado",
+      "auth/wrong-password": "Contraseña incorrecta",
+      "auth/invalid-email": "Correo inválido",
+      "auth/too-many-requests": "Demasiados intentos. Espera unos minutos.",
+      "auth/invalid-credential": "Credenciales inválidas"
+    };
+    errorEl.textContent = messages[e.code] || "Error: " + e.message;
+    errorEl.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Entrar";
+  }
+}
+
+document.getElementById("password").addEventListener("keypress", e => {
+  if (e.key === "Enter") login();
+});
+document.getElementById("email").addEventListener("keypress", e => {
+  if (e.key === "Enter") document.getElementById("password").focus();
+});
+</script>
+</body>
+</html>

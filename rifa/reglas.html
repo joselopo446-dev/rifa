@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reglas - Treebolito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-dark:#0d5c2e;
+  --green:#16a34a;
+  --green-light:#22c55e;
+  --green-pale:#064e3b;
+  --white:#e5e5e5;
+  --bg-dark:#0f0f0f;
+  --bg-card:#1a1a1a;
+  --gray-50:#1a1a1a;
+  --gray-100:#252525;
+  --gray-200:#333333;
+  --gray-500:#888888;
+  --text-primary:#ffffff;
+  --text-secondary:#aaaaaa;
+  --shadow:0 4px 6px -1px rgba(0,0,0,0.3);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh}
+.header{background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);padding:0.75rem 0;position:sticky;top:0;z-index:1000;box-shadow:var(--shadow)}
+.header-content{max-width:1200px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:0.5rem}
+.logo-icon{width:40px;height:40px}
+.logo-text{font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-list{display:flex;list-style:none;gap:0.5rem;align-items:center}
+.nav-list a{color:var(--text-primary);text-decoration:none;font-weight:600;padding:0.6rem 1rem;border-radius:50px;transition:all 0.3s}
+.nav-list a:hover{background:var(--green-pale);color:#4ade80}
+.nav-list a.active{background:var(--green);color:var(--white)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:0.5rem}
+.nav-toggle span{display:block;width:25px;height:3px;background:#22c55e;margin:5px 0;border-radius:2px}
+.container{max-width:800px;margin:0 auto;padding:2rem 1rem}
+.hero{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#0f0f0f 100%);color:var(--white);text-align:center;padding:3rem 1rem;border-bottom:1px solid var(--gray-200)}
+.hero-title{font-size:2.5rem;font-weight:800}
+.content{background:var(--bg-card);border-radius:20px;padding:2rem;margin-top:2rem;box-shadow:var(--shadow-lg);border:1px solid var(--gray-200)}
+.content h2{color:#22c55e;margin:2rem 0 1rem;font-size:1.4rem;font-weight:700}
+.content h2:first-child{margin-top:0}
+.content p{line-height:1.8;margin-bottom:1rem;font-size:1.05rem;color:var(--text-secondary)}
+.content ul{margin-left:1.5rem;margin-bottom:1.25rem;line-height:1.8}
+.content li{margin-bottom:0.5rem;color:var(--text-secondary)}
+.content strong{color:#22c55e}
+.info-box{background:var(--gray-100);padding:1.25rem 1.5rem;border-radius:14px;margin:1.25rem 0;border-left:4px solid var(--green)}
+.info-box p{margin-bottom:0.5rem;color:var(--text-primary)}
+.info-box p:last-child{margin-bottom:0}
+.footer{background:#0a0a0a;color:var(--white);padding:3rem 0;margin-top:3rem;text-align:center;border-top:1px solid var(--gray-200)}
+.footer-content{max-width:600px;margin:0 auto;padding:0 1rem}
+.footer-logo{font-size:1.75rem;font-weight:800;margin-bottom:1.5rem;background:linear-gradient(135deg,#4ade80,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer-links{display:flex;justify-content:center;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.footer-links a{color:var(--white);text-decoration:none;opacity:0.9;transition:all 0.3s;padding:0.5rem 1rem;border-radius:50px}
+.footer-links a:hover{opacity:1;background:rgba(34,197,94,0.2)}
+@media(max-width:768px){
+  .nav-toggle{display:block}
+  .nav-list{display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);flex-direction:column;padding:1rem;gap:.5rem;box-shadow:var(--shadow-lg)}
+  .nav-list.show{display:flex}
+  .content{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<svg viewBox="0 0 100 100" class="logo-icon">
+<defs>
+<linearGradient id="leafG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+<linearGradient id="leafG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient>
+</defs>
+<circle cx="50" cy="40" r="25" fill="url(#leafG1)"/>
+<circle cx="35" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="65" cy="30" r="18" fill="url(#leafG2)"/>
+<circle cx="50" cy="22" r="20" fill="url(#leafG1)"/>
+<circle cx="25" cy="25" r="12" fill="url(#leafG2)"/>
+<circle cx="75" cy="25" r="12" fill="url(#leafG2)"/>
+<path d="M47 65 Q50 80 53 65 L52 65 Q50 90 48 65 Z" fill="#92400e"/>
+</svg>
+<a href="index.html" class="logo-text">Treebolito</a>
+</div>
+<nav class="nav">
+<button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+<ul class="nav-list" id="navList">
+<li><a href="index.html">Inicio</a></li>
+<li><a href="index.html#numeros">Números</a></li>
+<li><a href="reglas.html" class="active">Reglas</a></li>
+<li><a href="login.html">Admin</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<section class="hero">
+<h1 class="hero-title">📋 Reglas y Condiciones</h1>
+</section>
+<div class="container">
+<div class="content">
+<h2>☘ Cómo participar</h2>
+<p>Participar en Treebolito es muy fácil:</p>
+<ol style="margin-left:1.5rem;margin-bottom:1.25rem;line-height:1.8">
+<li>Selecciona los números de tu preferencia en la página principal (máximo 100 números por compra)</li>
+<li>Genera tu ID de compra único</li>
+<li>Realiza la transferencia por el total ($1 MXN por número)</li>
+<li>Envía tu comprobante de pago por WhatsApp con tu ID de compra</li>
+<li>Espera la confirmación de tus números</li>
+</ol>
+
+<h2>☘ Datos de pago</h2>
+<div class="info-box">
+<p><strong>CLABE:</strong> 722969010056604160</p>
+<p><strong>WhatsApp:</strong> 4741482078</p>
+</div>
+
+<h2>☘ Proceso de confirmación</h2>
+<ul>
+<li>Una vez apartados tus números, tendrás <strong>24 horas</strong> para realizar el pago</li>
+<li>Envíanos el comprobante de pago por WhatsApp</li>
+<li>Incluye tu <strong>ID de compra</strong> en el mensaje</li>
+<li>Recibirás confirmación una vez verificado tu pago</li>
+</ul>
+
+<h2>☘ Expiración de apartados</h2>
+<p>Si no realizas el pago en un plazo de 24 horas, tus números seleccionados volvieron a estar disponibles para otros participantes.</p>
+
+<h2>☘ Sorteo</h2>
+<ul>
+<li>El sorteo se realizará el <strong>23 de Marzo de 2026</strong></li>
+<li>Se usará un número ganador generado aleatoriamente</li>
+<li>El número ganador se announced en esta página y por WhatsApp</li>
+</ul>
+
+<h2>☘ Premio</h2>
+<p>El premio será anunciado próximamente. ¡Asegúrate de conseguir tus números de la suerte!</p>
+
+<h2>☘ Condiciones generales</h2>
+<ul>
+<li>Cada número tiene un costo de $1 MXN</li>
+<li>Puedes seleccionar <strong>máximo 100 números</strong> por compra</li>
+<li>Si necesitas más de 100 números, realiza otra compra separada</li>
+<li>Los números están disponibles por orden de confirmación de pago</li>
+<li>Treebolito se reserva el derecho de modificar las fechas del sorteo</li>
+<li>Al realizar tu compra, aceptas estos términos y condiciones</li>
+<li>Para cualquier duda, contáctanos por WhatsApp</li>
+</ul>
+
+<div class="info-box">
+<p><strong>Nota:</strong> Mantén tu ID de compra en un lugar seguro. Lo necesitarás para cualquier consulta sobre tus números.</p>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-logo">☘ Treebolito</div>
+<div class="footer-links">
+<a href="index.html">Inicio</a>
+<a href="index.html#numeros">Números</a>
+<a href="reglas.html">Reglas</a>
+</div>
+<p>© 2026 Treebolito. Todos los derechos reservados.</p>
+</div>
+</footer>
+<script>
+document.getElementById("navToggle").onclick = () => document.getElementById("navList").classList.toggle("show");
+</script>
+</body>
+</html>
